@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Loading Animation - StayEase</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.bunny.net/css?family=Inter:400,500,600,700,800&family=Playfair+Display:700" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: white;
+        }
+
+        .demo-container {
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero-section h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary) 60%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .hero-section p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .loader-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .loader-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            transition: all 0.3s ease;
+        }
+
+        .loader-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .loader-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .loader-card p {
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 0.9375rem;
+        }
+
+        /* Premium Loading Animation */
+        .loader-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loader-ring-outer {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: var(--primary);
+            border-right-color: var(--secondary);
+            animation: spin-outer 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+
+        .loader-ring-inner {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-bottom-color: var(--accent);
+            border-left-color: var(--secondary);
+            animation: spin-inner 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+
+        .loader-logo {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+            animation: pulse-logo 2s ease-in-out infinite;
+        }
+
+        .loader-logo i {
+            color: white;
+            font-size: 1.25rem;
+            animation: bounce-icon 1.5s ease-in-out infinite;
+        }
+
+        .loader-dots {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .loader-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+            animation: orbit-dot 2s linear infinite;
+        }
+
+        .loader-dot:nth-child(1) { animation-delay: 0s; }
+        .loader-dot:nth-child(2) { animation-delay: -0.5s; }
+        .loader-dot:nth-child(3) { animation-delay: -1s; }
+        .loader-dot:nth-child(4) { animation-delay: -1.5s; }
+
+        .loader-text {
+            position: absolute;
+            bottom: -40px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            animation: fade-text 1.5s ease-in-out infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes spin-outer {
+            0% { transform: rotate(0deg); opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { transform: rotate(360deg); opacity: 1; }
+        }
+
+        @keyframes spin-inner {
+            0% { transform: rotate(0deg); opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { transform: rotate(-360deg); opacity: 0.8; }
+        }
+
+        @keyframes pulse-logo {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 12px 32px rgba(99, 102, 241, 0.4);
+            }
+        }
+
+        @keyframes bounce-icon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        @keyframes orbit-dot {
+            0% {
+                transform: rotate(0deg) translateX(50px) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% {
+                transform: rotate(360deg) translateX(50px) rotate(-360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fade-text {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Feature Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .feature-content h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .feature-content p {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 0;
+        }
+
+        /* Variations */
+        .loader-small .loader-container {
+            transform: scale(0.6);
+        }
+
+        .loader-medium .loader-container {
+            transform: scale(0.8);
+        }
+
+        .loader-large .loader-container {
+            transform: scale(1.2);
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .loader-showcase {
+                grid-template-columns: 1fr;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1>Premium Loading Animation</h1>
+            <p>Beautiful, modern loading animation with multiple rotating rings, orbiting particles, and smooth transitions</p>
+        </div>
+
+        <!-- Loader Showcase -->
+        <div class="loader-showcase">
+            <!-- Full Size -->
+            <div class="loader-card">
+                <h3>Full Size</h3>
+                <p>Default 120px loader with all animations</p>
+                <div class="loader-container">
+                    <div class="loader-ring-outer"></div>
+                    <div class="loader-ring-inner"></div>
+                    <div class="loader-dots">
+                        <div class="loader-dot"></div>
+                        <div class="loader-dot"></div>
+                        <div class="loader-dot"></div>
+                        <div class="loader-dot"></div>
+                    </div>
+                    <div class="loader-logo">
+                        <i class="fa-solid fa-hotel"></i>
+                    </div>
+                    <div class="loader-text">Loading...</div>
+                </div>
+            </div>
+
+            <!-- Medium Size -->
+            <div class="loader-card">
+                <h3>Medium Size</h3>
+                <p>Scaled down to 80% for compact spaces</p>
+                <div class="loader-medium">
+                    <div class="loader-container">
+                        <div class="loader-ring-outer"></div>
+                        <div class="loader-ring-inner"></div>
+                        <div class="loader-dots">
+                            <div class="loader-dot"></div>
+                            <div class="loader-dot"></div>
+                            <div class="loader-dot"></div>
+                            <div class="loader-dot"></div>
+                        </div>
+                        <div class="loader-logo">
+                            <i class="fa-solid fa-hotel"></i>
+                        </div>
+                        <div class="loader-text">Loading...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Small Size -->
+            <div class="loader-card">
+                <h3>Small Size</h3>
+                <p>Compact 60% scale for inline loading</p>
+                <div class="loader-small">
+                    <div class="loader-container">
+                        <div class="loader-ring-outer"></div>
+                        <div class="loader-ring-inner"></div>
+                        <div class="loader-dots">
+                            <div class="loader-dot"></div>
+                            <div class="loader-dot"></div>
+                            <div class="loader-dot"></div>
+                            <div class="loader-dot"></div>
+                        </div>
+                        <div class="loader-logo">
+                            <i class="fa-solid fa-hotel"></i>
+                        </div>
+                        <div class="loader-text">Loading...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-layer-group" style="color: white;"></i>
+                </div>
+                <div class="feature-content">
+                    <h4>Multi-layered Animation</h4>
+                    <p>Outer ring, inner ring, and orbiting particles work in harmony</p>
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-palette" style="color: white;"></i>
+                </div>
+                <div class="feature-content">
+                    <h4>Brand Colors</h4>
+                    <p>Uses StayEase primary, secondary, and accent colors</p>
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-wand-magic-sparkles" style="color: white;"></i>
+                </div>
+                <div class="feature-content">
+                    <h4>Smooth Easing</h4>
+                    <p>Cubic-bezier timing functions for natural motion</p>
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-universal-access" style="color: white;"></i>
+                </div>
+                <div class="feature-content">
+                    <h4>Accessibility</h4>
+                    <p>Respects prefers-reduced-motion for better UX</p>
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-heart-pulse" style="color: white;"></i>
+                </div>
+                <div class="feature-content">
+                    <h4>Pulsing Logo</h4>
+                    <p>Center logo pulses and bounces for visual interest</p>
+                </div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-circle-notch" style="color: white;"></i>
+                </div>
+                <div class="feature-content">
+                    <h4>Counter-Rotation</h4>
+                    <p>Inner and outer rings rotate in opposite directions</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn" onclick="location.reload()">
+                <i class="fa-solid fa-rotate-right" style="margin-right: 0.5rem;"></i>
+                Restart Animation
+            </button>
+            <button class="btn btn-secondary" onclick="window.print()">
+                <i class="fa-solid fa-download" style="margin-right: 0.5rem;"></i>
+                Save as PDF
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactivity
+        document.querySelectorAll('.loader-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const loaders = card.querySelectorAll('.loader-ring-outer, .loader-ring-inner');
+                loaders.forEach(loader => {
+                    loader.style.animationDuration = '0.6s';
+                });
+            });
+
+            card.addEventListener('mouseleave', () => {
+                const loaders = card.querySelectorAll('.loader-ring-outer, .loader-ring-inner');
+                loaders.forEach(loader => {
+                    loader.style.animationDuration = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
